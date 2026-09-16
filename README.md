@@ -1,107 +1,63 @@
-# 🎄 Christmas Photo Booth 🎅
+# ai/studio Enterprise
 
-A festive Christmas-themed photo booth web application that allows users to select from multiple holiday templates, capture photos using their device camera, and apply beautiful Christmas overlays to create memorable holiday pictures.
+A **focused TP-Web** — the same third-party client against the AI Studio edge
+engine, rebuilt here so we can change UI and handlers without touching
+`newaistudio/TP-Web`.
 
-## ✨ Features
+Reference implementation:
 
-- **8 Festive Templates**: Choose from beautifully designed Christmas-themed frames
-  - Santa's Workshop
-  - Winter Wonderland
-  - Christmas Tree
-  - Gingerbread House
-  - Mistletoe & Holly
-  - Santa Hat & Beard
-  - Reindeer Antlers
-  - Festive Lights
-
-- **Premium UI Experience**:
-  - Carousel template selector with smooth animations
-  - Real-time template preview on camera feed
-  - 3D flip transitions between templates
-  - Confetti effects on template selection
-  - Responsive design for all devices
-
-- **Camera Features**:
-  - Front/back camera switching
-  - Live preview with template overlay
-  - 3-2-1 countdown before capture
-  - High-quality photo capture
-  - Download photos with template merged
-
-- **Animations & Effects**:
-  - Smooth template transitions
-  - Animated snowfall background
-  - Pulsing decorative elements
-  - Glow effects and shadows
-  - Breathing animations
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/christmas-photo-booth.git
-cd christmas-photo-booth
+```
+../newaistudio/TP-Web
 ```
 
-2. Install dependencies:
+## Hard rule: engine only, never the gateway
+
+Every HTTP call goes through `src/lib/engineClient.ts`. Base URL is
+`import.meta.env.VITE_ENGINE_URL`. No page or component may call `fetch`
+directly. Studio gateway paths are out of scope.
+
+```
+VITE_ENGINE_URL=http://localhost:9000
+```
+
+API map (copied from TP-Web):
+
+- [`docs/engine-edge-apis.md`](docs/engine-edge-apis.md)
+- [`docs/code-repo-chat.md`](docs/code-repo-chat.md)
+
+## Screens (ported from TP-Web)
+
+| Route | Purpose |
+|---|---|
+| `/` | Login (SSO, password, admin-key fallback) |
+| `/dashboard` | Admin stats |
+| `/users`, `/users/:id` | User management |
+| `/roles` | Roles |
+| `/audit` | Audit log |
+| `/run` | Run a published mind |
+| `/credits` | Spend / caps |
+| `/code-repos`, `/code-repos/:repoId` | Repos, file viewer, CodeFlo chat |
+
+Admin pages are admin-only. A regular signed-in user gets Run, Credits, and
+Code Repos.
+
+## Run
+
 ```bash
+cp .env.example .env   # then edit VITE_ENGINE_URL if the engine is not on :9000
 npm install
+npm run dev            # http://localhost:5353
 ```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-4. Open your browser and navigate to `http://localhost:5173`
-
-## 📦 Build for Production
 
 ```bash
 npm run build
+npm run preview
 ```
 
-The built files will be in the `dist/` directory.
+This app uses **http://localhost:5353**, same origin as TP-Web. The engine
+CORS allow-list must include that origin.
 
-## 🛠️ Tech Stack
+## Next
 
-- **React** - UI framework
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
-- **SVG** - Template designs
-
-## 📱 Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-**Note**: Camera access requires HTTPS in production or localhost for development.
-
-## 🎨 Customization
-
-All templates are created using SVG and can be customized in the `src/ChristmasPhotoBooth.jsx` file. Each template is a React component that accepts `width` and `height` props.
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🙏 Acknowledgments
-
-- Christmas-themed design inspiration
-- SVG template designs
-- Animation effects and transitions
-
----
-
-Made with ❤️ for the holiday season
-
+UI, layout, and handlers in this repo are the working copy. Change them
+here; treat `newaistudio/TP-Web` as the behaviour reference.
