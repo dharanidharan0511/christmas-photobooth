@@ -1,0 +1,7 @@
+{
+  "/api/auth/admin-key/route": "app/api/auth/admin-key/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/signout/route": "app/api/auth/signout/route.js",
+  "/api/engine/[...path]/route": "app/api/engine/[...path]/route.js",
+  "/page": "app/page.js"
+}

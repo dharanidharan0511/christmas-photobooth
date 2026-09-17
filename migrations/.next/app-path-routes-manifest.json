@@ -1,0 +1,7 @@
+{
+  "/api/auth/admin-key/route": "/api/auth/admin-key",
+  "/_not-found/page": "/_not-found",
+  "/api/auth/signout/route": "/api/auth/signout",
+  "/api/engine/[...path]/route": "/api/engine/[...path]",
+  "/page": "/"
+}
