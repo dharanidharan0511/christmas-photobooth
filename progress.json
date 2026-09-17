@@ -1,8 +1,18 @@
 {
   "status": "completed",
   "analysis_complete": true,
-  "created_at": "2026-09-17T00:00:00Z",
-  "updated_at": "2026-09-17T00:07:00Z",
+  "last_phase": "CodeAnalysis",
+  "target_framework": "",
+  "target_database": "",
+  "additional_context": {
+    "analysis_mode": "",
+    "instructions": ""
+  },
+  "agents": [
+    "CodeAnalysis",
+    "CodeMigration",
+    "CodeRefinement"
+  ],
   "complexity_analysis": {
     "source_framework": "React 18.3.1 + Vite 6.3.5 + TypeScript 5.8",
     "codebase_size": "medium",
@@ -13,27 +23,37 @@
     "reasoning": "Medium-sized React SPA (~13k LOC, 73 modules) with no local DB; 4 migration checkpoints cover foundation setup, auth and admin UI, feature suites (CodeFlo/DocFlo/Run), and production hardening."
   },
   "CodeAnalysis": {
+    "summary": {
+      "total_checkpoints": 1,
+      "total_tasks": 7
+    },
     "checkpoints": [
       {
         "id": "checkpoint_001",
         "title": "Code Analysis",
         "status": "completed",
-        "tasks": [
-          { "id": "task_1", "title": "Repository Analysis",       "status": "completed" },
-          { "id": "task_2", "title": "Business Logic Extraction", "status": "completed" },
-          { "id": "task_3", "title": "Data Model Analysis",       "status": "completed" },
-          { "id": "task_4", "title": "Security Assessment",       "status": "completed" },
-          { "id": "task_5", "title": "Documentation",             "status": "completed" },
-          { "id": "task_6", "title": "Migration Planning",        "status": "completed" },
-          { "id": "task_7", "title": "Compliance Validation",     "status": "completed" }
-        ]
+        "started_at": null,
+        "completed_at": null,
+        "tasks": {
+          "task_1": "completed",
+          "task_2": "completed",
+          "task_3": "completed",
+          "task_4": "completed",
+          "task_5": "completed",
+          "task_6": "completed",
+          "task_7": "completed"
+        }
       }
     ]
   },
   "CodeMigration": {
+    "summary": {
+      "total_checkpoints": 4,
+      "total_tasks": 30
+    },
     "checkpoints": [
       {
-        "checkpoint_id": "checkpoint_002",
+        "id": "checkpoint_002",
         "title": "Foundation and Infrastructure",
         "description": "Bootstrap Next.js 15 project, migrate build configuration, set up TypeScript and Tailwind 4, create engine API Route Handlers proxy, and migrate shared type definitions.",
         "estimated_total_minutes": 480,
@@ -130,7 +150,7 @@
         ]
       },
       {
-        "checkpoint_id": "checkpoint_003",
+        "id": "checkpoint_003",
         "title": "Auth, Admin, and Core UI",
         "description": "Migrate authentication flows, all admin pages, layout shell components, and shared UI primitives. Admin key moves to HTTP-only cookie (fixes SEC-H-001).",
         "estimated_total_minutes": 480,
@@ -238,7 +258,7 @@
         ]
       },
       {
-        "checkpoint_id": "checkpoint_004",
+        "id": "checkpoint_004",
         "title": "Feature Suites: Run Minds and CodeFlo+",
         "description": "Migrate RunPage (1,549 lines, SSE streaming) and CodeFlo+ (repo browser, kanban, review). SSE streaming through Route Handler proxy is highest-risk work.",
         "estimated_total_minutes": 600,
@@ -257,7 +277,7 @@
           },
           {
             "task_id": "task_019",
-            "title": "Migrate RunPage — Execute and Chat modes",
+            "title": "Migrate RunPage -- Execute and Chat modes",
             "description": "Port RunPage.tsx (1,549 lines) to app/(authenticated)/run/[mindId]/page.tsx. Split into sub-components. Fix SEC-H-002: replace localStorage with sessionStorage for Mind Share Key.",
             "estimated_minutes": 180,
             "priority": "critical",
@@ -291,7 +311,7 @@
         ]
       },
       {
-        "checkpoint_id": "checkpoint_005",
+        "id": "checkpoint_005",
         "title": "DocFlo+, Polish, Security Hardening, and Testing",
         "description": "Migrate DocFlo+ pages, implement CSP headers and remaining security fixes, add comprehensive test suite (Vitest + Playwright), and perform final production hardening.",
         "estimated_total_minutes": 600,
@@ -399,5 +419,23 @@
         ]
       }
     ]
-  }
+  },
+  "CodeRefinement": {
+    "summary": {
+      "total_checkpoints": 0,
+      "total_tasks": 0
+    },
+    "checkpoints": []
+  },
+  "artifact_log": [
+    {"task": "task_1", "status": "completed", "timestamp": "2026-09-17T00:01:00Z", "artifact": "analysis/repository-metadata.md"},
+    {"task": "task_2", "status": "completed", "timestamp": "2026-09-17T00:02:00Z", "artifact": "analysis/business-logic.md"},
+    {"task": "task_3", "status": "completed", "timestamp": "2026-09-17T00:03:00Z", "artifact": "analysis/data-models.md"},
+    {"task": "task_4", "status": "completed", "timestamp": "2026-09-17T00:04:00Z", "artifact": "analysis/security-report.md"},
+    {"task": "task_5", "status": "completed", "timestamp": "2026-09-17T00:05:00Z", "artifact": "analysis/docs/"},
+    {"task": "task_6", "status": "completed", "timestamp": "2026-09-17T00:06:00Z", "artifact": "analysis/migration-plan/"},
+    {"task": "task_7", "status": "completed", "timestamp": "2026-09-17T00:07:00Z", "artifact": "analysis/compliance-report.md"}
+  ],
+  "last_updated_at": "2026-09-17T00:07:30+00:00",
+  "last_updated_by": "CodeAnalysis"
 }
