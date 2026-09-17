@@ -1,0 +1,403 @@
+{
+  "status": "completed",
+  "analysis_complete": true,
+  "created_at": "2026-09-17T00:00:00Z",
+  "updated_at": "2026-09-17T00:07:00Z",
+  "complexity_analysis": {
+    "source_framework": "React 18.3.1 + Vite 6.3.5 + TypeScript 5.8",
+    "codebase_size": "medium",
+    "total_loc": 12794,
+    "module_count": 73,
+    "table_count": 0,
+    "recommended_checkpoints": 4,
+    "reasoning": "Medium-sized React SPA (~13k LOC, 73 modules) with no local DB; 4 migration checkpoints cover foundation setup, auth and admin UI, feature suites (CodeFlo/DocFlo/Run), and production hardening."
+  },
+  "CodeAnalysis": {
+    "checkpoints": [
+      {
+        "id": "checkpoint_001",
+        "title": "Code Analysis",
+        "status": "completed",
+        "tasks": [
+          { "id": "task_1", "title": "Repository Analysis",       "status": "completed" },
+          { "id": "task_2", "title": "Business Logic Extraction", "status": "completed" },
+          { "id": "task_3", "title": "Data Model Analysis",       "status": "completed" },
+          { "id": "task_4", "title": "Security Assessment",       "status": "completed" },
+          { "id": "task_5", "title": "Documentation",             "status": "completed" },
+          { "id": "task_6", "title": "Migration Planning",        "status": "completed" },
+          { "id": "task_7", "title": "Compliance Validation",     "status": "completed" }
+        ]
+      }
+    ]
+  },
+  "CodeMigration": {
+    "checkpoints": [
+      {
+        "checkpoint_id": "checkpoint_002",
+        "title": "Foundation and Infrastructure",
+        "description": "Bootstrap Next.js 15 project, migrate build configuration, set up TypeScript and Tailwind 4, create engine API Route Handlers proxy, and migrate shared type definitions.",
+        "estimated_total_minutes": 480,
+        "status": "pending",
+        "tasks": [
+          {
+            "task_id": "task_001",
+            "title": "Bootstrap Next.js 15 App Router project",
+            "description": "Create a new Next.js 15 project using the App Router with TypeScript enabled. Configure next.config.js with output mode, basePath, and redirects.",
+            "estimated_minutes": 60,
+            "priority": "critical",
+            "files_to_create": ["package.json", "next.config.js", "tsconfig.json", "app/layout.tsx", "app/page.tsx", ".env.example"],
+            "dependencies": [],
+            "acceptance_criteria": ["next build completes without errors", "next dev starts and serves the root route", "TypeScript compilation succeeds with strict mode", "No VITE_* environment variables present"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_002",
+            "title": "Migrate TypeScript configuration",
+            "description": "Port tsconfig.app.json and tsconfig.node.json strict settings into Next.js tsconfig.json. Enable noUncheckedIndexedAccess.",
+            "estimated_minutes": 30,
+            "priority": "critical",
+            "files_to_create": ["tsconfig.json"],
+            "dependencies": ["task_001"],
+            "acceptance_criteria": ["tsc --noEmit passes with zero errors", "noUncheckedIndexedAccess is enabled", "Path aliases resolve correctly in Next.js"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_003",
+            "title": "Migrate Tailwind CSS 3 to Tailwind CSS 4 (CSS-first config)",
+            "description": "Upgrade tailwindcss to v4. Replace tailwind.config.js with CSS-first configuration using @theme directive.",
+            "estimated_minutes": 60,
+            "priority": "critical",
+            "files_to_create": ["app/globals.css", "postcss.config.mjs"],
+            "dependencies": ["task_001"],
+            "acceptance_criteria": ["Tailwind 4 installed and compiles without errors", "Custom theme tokens available as CSS custom properties", "All Tailwind utility classes preserved", "No tailwind.config.js required at runtime"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_004",
+            "title": "Migrate shared type definitions",
+            "description": "Copy src/types/engine.ts and src/types/codeRepos.ts to the Next.js project. Replace Vite-specific imports.",
+            "estimated_minutes": 30,
+            "priority": "critical",
+            "files_to_create": ["types/engine.ts", "types/codeRepos.ts"],
+            "dependencies": ["task_002"],
+            "acceptance_criteria": ["All 18 entity interfaces from source/src/types/engine.ts present", "All code repo types present", "No vite-env.d.ts references", "tsc compiles without errors"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_005",
+            "title": "Migrate utility libraries (lib/)",
+            "description": "Port all src/lib/*.ts utility modules. Remove Vite-specific imports.",
+            "estimated_minutes": 30,
+            "priority": "high",
+            "files_to_create": ["lib/utils.ts", "lib/credit-errors.ts", "lib/code-repos.ts", "lib/code-repo-file-utils.ts", "lib/code-repo-line-highlight.ts", "lib/codeRepoChat.ts"],
+            "dependencies": ["task_004"],
+            "acceptance_criteria": ["All utility functions compile without errors", "No import.meta.env references remain", "cn() helper functions correctly with Tailwind 4 class names"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_006",
+            "title": "Create engine API Route Handlers (server-side proxy)",
+            "description": "Create Next.js Route Handlers that proxy all requests to ENGINE_URL server-side. Implement generic REST proxy and SSE streaming proxy. Fixes SEC-C-001.",
+            "estimated_minutes": 120,
+            "priority": "critical",
+            "files_to_create": ["app/api/engine/[...path]/route.ts", "lib/engineClient.ts"],
+            "dependencies": ["task_004", "task_005"],
+            "acceptance_criteria": ["ENGINE_URL set only in server environment", "All engineClient.ts functions call /api/engine/...", "SSE streaming endpoints return proper text/event-stream response", "next build succeeds with no environment variable warnings"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_007",
+            "title": "Configure environment variables and .env files",
+            "description": "Replace all VITE_* environment variables with Next.js conventions. Audit codebase for remaining import.meta.env references.",
+            "estimated_minutes": 30,
+            "priority": "critical",
+            "files_to_create": [".env.local.example", ".env.local"],
+            "dependencies": ["task_006"],
+            "acceptance_criteria": ["Zero import.meta.env references in new codebase", "ENGINE_URL is NOT prefixed with NEXT_PUBLIC_", "next build does not embed ENGINE_URL in browser bundle"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_008",
+            "title": "Set up QueryClient and global providers",
+            "description": "Create React Query provider as Client Component. Create root app/layout.tsx wrapping app in all providers.",
+            "estimated_minutes": 30,
+            "priority": "high",
+            "files_to_create": ["app/layout.tsx", "components/providers/QueryProvider.tsx"],
+            "dependencies": ["task_006"],
+            "acceptance_criteria": ["Root layout compiles as a Server Component", "QueryProvider is a 'use client' Client Component", "useQuery hooks are functional", "next dev starts without React context errors"],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "checkpoint_id": "checkpoint_003",
+        "title": "Auth, Admin, and Core UI",
+        "description": "Migrate authentication flows, all admin pages, layout shell components, and shared UI primitives. Admin key moves to HTTP-only cookie (fixes SEC-H-001).",
+        "estimated_total_minutes": 480,
+        "status": "pending",
+        "tasks": [
+          {
+            "task_id": "task_009",
+            "title": "Migrate authentication hook and context",
+            "description": "Port useAuth.tsx. Replace sessionStorage admin key with HTTP-only cookie via Route Handler. Closes SEC-H-001.",
+            "estimated_minutes": 90,
+            "priority": "critical",
+            "files_to_create": ["hooks/useAuth.tsx", "app/api/auth/admin-key/route.ts", "app/api/auth/signout/route.ts"],
+            "dependencies": ["task_008"],
+            "acceptance_criteria": ["SSO login redirect works", "Admin key stored in HttpOnly cookie, not sessionStorage", "Sign-out clears server-side cookie", "SEC-H-001 remediation verified"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_010",
+            "title": "Migrate LoginPage",
+            "description": "Port LoginPage.tsx to app/login/page.tsx. Add client-side rate limiting (SEC-M-003) and key format validation (SEC-M-001).",
+            "estimated_minutes": 60,
+            "priority": "critical",
+            "files_to_create": ["app/login/page.tsx"],
+            "dependencies": ["task_009"],
+            "acceptance_criteria": ["All three login modes functional", "Password submit disabled for 2 seconds after failure", "Admin key input shows format validation warning", "Redirect to dashboard on successful login"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_011",
+            "title": "Migrate layout shell components (AppLayout, Sidebar, Topbar)",
+            "description": "Port layout components. Replace React Router Link with Next.js Link. Add middleware for auth guard.",
+            "estimated_minutes": 60,
+            "priority": "high",
+            "files_to_create": ["app/(authenticated)/layout.tsx", "components/layout/AppLayout.tsx", "components/layout/Sidebar.tsx", "components/layout/Topbar.tsx", "components/layout/AdminSectionLayout.tsx", "middleware.ts"],
+            "dependencies": ["task_009"],
+            "acceptance_criteria": ["Authenticated route group renders AppLayout", "Sidebar navigation links work with Next.js Link", "Unauthenticated users redirected to /login", "Admin-only routes redirect non-admin users"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_012",
+            "title": "Migrate shared UI primitive components",
+            "description": "Port all components/ui/ primitives. Remove React Router and Vite-specific imports.",
+            "estimated_minutes": 60,
+            "priority": "high",
+            "files_to_create": ["components/ui/Button.tsx", "components/ui/Input.tsx", "components/ui/Select.tsx", "components/ui/Badge.tsx", "components/ui/Card.tsx", "components/ui/Table.tsx", "components/ui/Spinner.tsx", "components/ui/AppLogo.tsx", "components/ui/LinedPanel.tsx", "components/ui/ApiErrorState.tsx", "components/ui/EmptyState.tsx", "components/ui/ErrorState.tsx", "components/ui/ShortcutsModal.tsx", "components/ui/ProfilePopover.tsx"],
+            "dependencies": ["task_011"],
+            "acceptance_criteria": ["All 14 UI primitive components compile", "No React Router imports in UI primitives", "Tailwind 4 classes apply correctly"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_013",
+            "title": "Migrate theme and keyboard shortcut hooks",
+            "description": "Port useTheme, useSidebarCollapse, useKeyboardShortcuts, useHighlightTheme, and ShortcutsContext. Use SSR-compatible theme toggle.",
+            "estimated_minutes": 30,
+            "priority": "medium",
+            "files_to_create": ["hooks/useTheme.tsx", "hooks/useSidebarCollapse.tsx", "hooks/useKeyboardShortcuts.ts", "hooks/useHighlightTheme.ts", "context/ShortcutsContext.tsx"],
+            "dependencies": ["task_008"],
+            "acceptance_criteria": ["Dark/light theme toggle works without hydration flash", "Keyboard shortcuts functional in client", "Sidebar collapse state persists"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_014",
+            "title": "Migrate DashboardPage",
+            "description": "Port DashboardPage.tsx to app/(authenticated)/dashboard/page.tsx as RSC with prefetched data.",
+            "estimated_minutes": 45,
+            "priority": "high",
+            "files_to_create": ["app/(authenticated)/dashboard/page.tsx"],
+            "dependencies": ["task_011", "task_012"],
+            "acceptance_criteria": ["Dashboard renders suite cards with prefetched data", "Navigation to suite pages works", "Your apps grid renders correctly"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_015",
+            "title": "Migrate admin pages: UsersPage and UserDetailPage",
+            "description": "Port UsersPage.tsx and UserDetailPage.tsx. Increase password minimum to 12 chars (SEC-L-003). Replace useParams with Next.js params.",
+            "estimated_minutes": 60,
+            "priority": "high",
+            "files_to_create": ["app/(authenticated)/admin/users/page.tsx", "app/(authenticated)/admin/users/[userId]/page.tsx", "components/users/"],
+            "dependencies": ["task_011", "task_012"],
+            "acceptance_criteria": ["User list renders with pagination", "Inline role assignment works", "Password minimum length 12 chars", "useParams replaced with Next.js params prop"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_016",
+            "title": "Migrate admin pages: RolesPage, AuditLogPage, CreditsPage",
+            "description": "Port RolesPage.tsx, AuditLogPage.tsx, CreditsPage.tsx and related component folders.",
+            "estimated_minutes": 60,
+            "priority": "medium",
+            "files_to_create": ["app/(authenticated)/admin/roles/page.tsx", "app/(authenticated)/admin/audit/page.tsx", "app/(authenticated)/admin/credits/page.tsx", "components/roles/", "components/credits/"],
+            "dependencies": ["task_011", "task_012"],
+            "acceptance_criteria": ["All three admin pages render with real data", "Role catalog display matches source", "Audit log pagination works", "Spend cap and topup flow functional"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_017",
+            "title": "Migrate MyProfilePage",
+            "description": "Port MyProfilePage.tsx to app/(authenticated)/profile/page.tsx.",
+            "estimated_minutes": 30,
+            "priority": "low",
+            "files_to_create": ["app/(authenticated)/profile/page.tsx"],
+            "dependencies": ["task_011", "task_012"],
+            "acceptance_criteria": ["Profile page renders user info from /v1/me endpoint", "Spend cap display matches source", "Accessible to non-admin users"],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "checkpoint_id": "checkpoint_004",
+        "title": "Feature Suites: Run Minds and CodeFlo+",
+        "description": "Migrate RunPage (1,549 lines, SSE streaming) and CodeFlo+ (repo browser, kanban, review). SSE streaming through Route Handler proxy is highest-risk work.",
+        "estimated_total_minutes": 600,
+        "status": "pending",
+        "tasks": [
+          {
+            "task_id": "task_018",
+            "title": "Implement and test SSE streaming Route Handler",
+            "description": "Implement and verify SSE proxy Route Handler before migrating RunPage. Create a test harness page to validate streaming works end-to-end.",
+            "estimated_minutes": 90,
+            "priority": "critical",
+            "files_to_create": ["app/api/engine/stream/[...path]/route.ts", "app/sse-test/page.tsx"],
+            "dependencies": ["task_006"],
+            "acceptance_criteria": ["SSE test page shows streaming tokens progressively", "Route Handler sets Content-Type: text/event-stream with no-cache", "First token appears within 2 seconds", "Stream terminates cleanly on [DONE] event", "No buffering of tokens"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_019",
+            "title": "Migrate RunPage — Execute and Chat modes",
+            "description": "Port RunPage.tsx (1,549 lines) to app/(authenticated)/run/[mindId]/page.tsx. Split into sub-components. Fix SEC-H-002: replace localStorage with sessionStorage for Mind Share Key.",
+            "estimated_minutes": 180,
+            "priority": "critical",
+            "files_to_create": ["app/(authenticated)/run/[mindId]/page.tsx", "components/run/RunHeader.tsx", "components/run/MindSelector.tsx", "components/run/ExecuteForm.tsx", "components/run/ChatInterface.tsx", "components/run/SessionHistory.tsx", "components/run/SessionDetail.tsx", "components/run/ShareKeyPanel.tsx"],
+            "dependencies": ["task_018", "task_011", "task_012"],
+            "acceptance_criteria": ["Execute mode: form submits and SSE stream renders tokens progressively", "Chat mode: message history renders correctly", "Session history sidebar works", "Mind Share Key stored in sessionStorage only (SEC-H-002 fixed)", "No hydration errors"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_020",
+            "title": "Migrate CodeReposPage and CodeRepoViewerPage",
+            "description": "Port CodeReposPage.tsx and CodeRepoViewerPage.tsx. Preserve file tree navigation, pagination, walk limits, and syntax highlighting.",
+            "estimated_minutes": 90,
+            "priority": "high",
+            "files_to_create": ["app/(authenticated)/code-repos/page.tsx", "app/(authenticated)/code-repos/[repoId]/page.tsx", "components/code-repos/"],
+            "dependencies": ["task_011", "task_012"],
+            "acceptance_criteria": ["Code repo list renders with real data", "File tree navigation works with pagination", "Syntax highlighting via highlight.js renders", "Walk limits preserved", "Breadcrumb navigation functional"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_021",
+            "title": "Migrate CodeRepoKanbanPage and CodeRepoReviewPage",
+            "description": "Port CodeRepoKanbanPage.tsx and CodeRepoReviewPage.tsx. Migrate codeRepoChat.ts integration.",
+            "estimated_minutes": 60,
+            "priority": "high",
+            "files_to_create": ["app/(authenticated)/code-repos/[repoId]/kanban/page.tsx", "app/(authenticated)/code-repos/[repoId]/review/page.tsx"],
+            "dependencies": ["task_020"],
+            "acceptance_criteria": ["Kanban board renders code repo tasks", "Review page shows diff/review interface", "Code repo chat integration functional", "Pages compile without errors"],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "checkpoint_id": "checkpoint_005",
+        "title": "DocFlo+, Polish, Security Hardening, and Testing",
+        "description": "Migrate DocFlo+ pages, implement CSP headers and remaining security fixes, add comprehensive test suite (Vitest + Playwright), and perform final production hardening.",
+        "estimated_total_minutes": 600,
+        "status": "pending",
+        "tasks": [
+          {
+            "task_id": "task_022",
+            "title": "Migrate DocFlo pages",
+            "description": "Port DocFloAgentsPage.tsx, DocFloAgentChatPage.tsx, and DocFloCorpusPage.tsx. Verify SSE streaming works for DocFlo agent responses.",
+            "estimated_minutes": 90,
+            "priority": "high",
+            "files_to_create": ["app/(authenticated)/docflo/page.tsx", "app/(authenticated)/docflo/[agentId]/chat/page.tsx", "app/(authenticated)/docflo/corpus/page.tsx"],
+            "dependencies": ["task_018", "task_011", "task_012"],
+            "acceptance_criteria": ["DocFlo agent list renders", "Agent chat works with streaming response", "Corpus page renders document list", "Navigation between DocFlo sections works"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_023",
+            "title": "Implement Content Security Policy headers",
+            "description": "Configure CSP headers in next.config.js. Add X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. Closes SEC-H-003 and SEC-L-002.",
+            "estimated_minutes": 45,
+            "priority": "critical",
+            "files_to_create": ["next.config.js", "lib/csp.ts"],
+            "dependencies": ["task_001"],
+            "acceptance_criteria": ["next dev serves CSP header on all pages", "No CSP violations on dashboard and run pages", "X-Frame-Options: DENY present", "X-Content-Type-Options: nosniff present"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_024",
+            "title": "Implement key format validation and rate limiting",
+            "description": "Add client-side key format validation and rate limiting. Closes SEC-M-001 and SEC-M-003.",
+            "estimated_minutes": 30,
+            "priority": "medium",
+            "files_to_create": ["lib/auth-validation.ts"],
+            "dependencies": ["task_010"],
+            "acceptance_criteria": ["Admin key input shows 'Invalid key format' warning for invalid strings", "Password submit disabled for 2 seconds after failure", "Valid keys not blocked", "SEC-M-001 and SEC-M-003 documented as remediated"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_025",
+            "title": "Add SSE integrity logging and TLS documentation",
+            "description": "Add production-safe telemetry hook for SSE parse failures. Add infrastructure deployment documentation. Addresses SEC-M-002.",
+            "estimated_minutes": 30,
+            "priority": "medium",
+            "files_to_create": ["lib/logger.ts", "docs/deployment.md"],
+            "dependencies": ["task_006"],
+            "acceptance_criteria": ["SSE parse failures produce structured log event without payload data", "Deployment README documents TLS requirement and CORS config"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_026",
+            "title": "Audit and pin lucide-react dependency",
+            "description": "Run npm audit, verify lucide-react integrity, pin to exact stable version. Addresses SEC-L-001.",
+            "estimated_minutes": 15,
+            "priority": "low",
+            "files_to_create": ["package.json", "package-lock.json"],
+            "dependencies": ["task_001"],
+            "acceptance_criteria": ["npm audit returns zero high/critical vulnerabilities", "lucide-react pinned to exact version", "All icon imports work after version pin"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_027",
+            "title": "Add unit and component tests with Vitest",
+            "description": "Set up Vitest with React Testing Library. Write unit tests for engineClient.ts, auth-validation.ts, credit-errors.ts, utils.ts. Write component tests for Button, Input, LoginPage. Target >= 70% branch coverage.",
+            "estimated_minutes": 120,
+            "priority": "high",
+            "files_to_create": ["vitest.config.ts", "tests/unit/engineClient.test.ts", "tests/unit/auth-validation.test.ts", "tests/unit/credit-errors.test.ts", "tests/unit/utils.test.ts", "tests/components/Button.test.tsx", "tests/components/Input.test.tsx", "tests/components/LoginPage.test.tsx"],
+            "dependencies": ["task_010", "task_012", "task_024"],
+            "acceptance_criteria": ["vitest run completes with zero failures", ">= 70% branch coverage on engineClient.ts", ">= 70% branch coverage on auth-validation.ts", "LoginPage tests cover all three login modes and rate limiting"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_028",
+            "title": "Add end-to-end tests with Playwright",
+            "description": "Set up Playwright. Write E2E tests for: SSO login, password login, execute a Mind with streaming, create user as admin, assign role.",
+            "estimated_minutes": 90,
+            "priority": "high",
+            "files_to_create": ["playwright.config.ts", "tests/e2e/login.spec.ts", "tests/e2e/run-mind.spec.ts", "tests/e2e/admin-users.spec.ts"],
+            "dependencies": ["task_019", "task_010", "task_015"],
+            "acceptance_criteria": ["playwright test runs all specs with zero failures", "Login E2E covers SSO and password flow", "Run Mind E2E verifies streaming token appears", "Admin user create E2E functional"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_029",
+            "title": "Lighthouse CI performance audit",
+            "description": "Run Lighthouse CI against built Next.js app. Target: performance >= 85, accessibility >= 90.",
+            "estimated_minutes": 45,
+            "priority": "medium",
+            "files_to_create": [".lighthouserc.json", "docs/lighthouse-results.md"],
+            "dependencies": ["task_019", "task_014"],
+            "acceptance_criteria": ["Lighthouse performance score >= 85 on dashboard and run pages", "Lighthouse accessibility score >= 90", "No critical accessibility violations", "Results documented"],
+            "status": "pending"
+          },
+          {
+            "task_id": "task_030",
+            "title": "Final migration cutover and deployment validation",
+            "description": "Merge migration/nextjs branch. Update CI/CD to use next build. Update Docker config to next start. Validate staging. Remove legacy Vite configuration files.",
+            "estimated_minutes": 60,
+            "priority": "critical",
+            "files_to_create": [".github/workflows/build.yml", "Dockerfile", "docs/migration-cutover.md"],
+            "dependencies": ["task_027", "task_028", "task_023", "task_022"],
+            "acceptance_criteria": ["next build succeeds in CI with no warnings", "Deployed staging app passes all Playwright E2E tests", "No VITE_* variables in deployment config", "All 12 security findings documented as remediated or accepted", "Legacy vite.config.ts removed"],
+            "status": "pending"
+          }
+        ]
+      }
+    ]
+  }
+}
